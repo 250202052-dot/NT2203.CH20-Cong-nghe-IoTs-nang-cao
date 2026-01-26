@@ -1,0 +1,96 @@
+:root {
+    --primary: #1e88e5;
+    --bg: #f2f4f8;
+    --card: #ffffff;
+    --text: #333;
+}
+
+body {
+    margin: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+}
+
+header {
+    background: linear-gradient(135deg, #1e88e5, #42a5f5);
+    color: white;
+    text-align: center;
+    padding: 30px 20px;
+}
+
+main {
+    max-width: 1200px;
+    margin: auto;
+    padding: 20px;
+}
+
+.tabs {
+    display: flex;
+    background: #e3e8ef;
+    border-radius: 12px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+.tab {
+    flex: 1;
+    padding: 14px;
+    text-align: center;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.tab.active {
+    background: white;
+    color: var(--primary);
+    font-weight: 600;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tab-content.active {
+    display: block;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+.card {
+    background: var(--card);
+    border-radius: 16px;
+    padding: 20px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+}
+
+.icon {
+    font-size: 32px;
+}
+
+.value {
+    font-size: 38px;
+    font-weight: bold;
+}
+
+.chart-card {
+    margin-top: 20px;
+}
+
+.prediction {
+    font-size: 20px;
+    color: var(--primary);
+    font-weight: 600;
+    margin-bottom: 10px;
+}
+
+footer {
+    text-align: center;
+    font-size: 13px;
+    color: #777;
+    padding: 20px;
+}
