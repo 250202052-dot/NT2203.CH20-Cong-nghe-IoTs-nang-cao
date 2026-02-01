@@ -38,8 +38,8 @@ const unsigned long SAMPLE_INTERVAL = 10000;   // 10s
 const unsigned long SEND_INTERVAL   = 60000;   // 1 phút
 
 // ================= WEB SERVER - FLASK =================
-const char* SERVER_URL = "http://192.168.1.100:8080/log";
-const char* SERVER_API_URL = "https://weatherwebapplication-gfdxa5fkcxdth0gy.eastasia-01.azurewebsites.net/api/weather1";
+// const char* SERVER_URL = "http://192.168.1.100:8080/log";
+const char* SERVER_API_URL = "https://weatherwebapplication-gfdxa5fkcxdth0gy.eastasia-01.azurewebsites.net/api/weather";
 // ================= SENSOR COLLECT =================
 void collectBME280() {
   gTemp = bme.readTemperature();
@@ -72,24 +72,24 @@ void sendToPC() {
   Serial.println(gPres, 2);
 }
 
-void sendToServer() {
-  if (WiFi.status() != WL_CONNECTED) return;
-  if (isnan(gTemp) || isnan(gHum) || isnan(gPres)) return;
+// void sendToServer() {
+//   if (WiFi.status() != WL_CONNECTED) return;
+//   if (isnan(gTemp) || isnan(gHum) || isnan(gPres)) return;
 
-  HTTPClient http;
-  http.begin(SERVER_URL);
-  http.addHeader("Content-Type", "application/json");
+//   HTTPClient http;
+//   http.begin(SERVER_URL);
+//   http.addHeader("Content-Type", "application/json");
 
-  String payload = "{";
-  payload += "\"time\":\"" + getTimestamp() + "\",";
-  payload += "\"temperature\":" + String(gTemp, 2) + ",";
-  payload += "\"humidity\":" + String(gHum, 2) + ",";
-  payload += "\"pressure\":" + String(gPres, 2);
-  payload += "}";
+//   String payload = "{";
+//   payload += "\"time\":\"" + getTimestamp() + "\",";
+//   payload += "\"temperature\":" + String(gTemp, 2) + ",";
+//   payload += "\"humidity\":" + String(gHum, 2) + ",";
+//   payload += "\"pressure\":" + String(gPres, 2);
+//   payload += "}";
 
-  http.POST(payload);
-  http.end();
-}
+//   http.POST(payload);
+//   http.end();
+// }
 
 // ================= READ FOR WEB =================
 String readBME280Temperature() {
@@ -249,7 +249,7 @@ void loop() {
   if (now - lastSendTime >= SEND_INTERVAL) {
     lastSendTime = now;
     sendToPC();  
-    sendToServer();
-    // sendToServerAPI();
+    // sendToServer();
+    sendToServerAPI();
   }
 }
