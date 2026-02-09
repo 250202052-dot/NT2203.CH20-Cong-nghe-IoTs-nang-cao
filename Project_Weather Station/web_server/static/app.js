@@ -54,31 +54,6 @@ function notifyTelegram(message) {
   });
 }
 
-
-// async function loadDashboard() {
-//     try {
-//         // 1️⃣ Gọi API dashboard (server đã lọc sẵn)
-//         const res = await fetch("/api/dashboard");
-//         const data = await res.json();
-
-//         // 2️⃣ Đổ dữ liệu lên UI
-//         tempEl.innerText = data.temp;
-//         humEl.innerText  = data.humidity;
-//         presEl.innerText = data.pressure;
-
-//         // 3️⃣ Hiển thị thời gian đo
-//         weatherNewsEl.innerHTML = `
-//             🌤️ Dữ liệu mới nhất<br>
-//             🕒 ${new Date(data.createdAt).toLocaleString("vi-VN")}
-//         `;
-//         loadDashboardCharts();
-//     } catch (err) {
-//         // 4️⃣ Lỗi thì báo
-//         weatherNewsEl.innerText = "❌ Không lấy được dữ liệu";
-//         console.error(err);
-//     }
-// }
-
 async function loadDashboard() {
   try {
     // 1️⃣ Gọi API dashboard
@@ -110,9 +85,9 @@ async function loadDashboard() {
 
     // 3️⃣ Hiển thị thời gian đo
     weatherNewsEl.innerHTML = `
-      🌤️ Dữ liệu mới nhất<br>
-      🕒 ${new Date(data.createdAt).toLocaleString("vi-VN")}
-    `;
+        🌤️ Dữ liệu mới nhất<br>
+        🕒 ${new Date(data.createdAt).toLocaleString("vi-VN")}
+        `;
 
     loadDashboardCharts();
 
@@ -130,6 +105,16 @@ async function loadDashboard() {
     );
   }
 }
+
+
+    setInterval(() => {
+        fetch("/api/advice")
+        .then(r => r.json())
+        .then(data => {
+            document.getElementById("ai-recommend").innerText = data.advice;
+        });
+    }, 60000);
+
 
 /* ================= Vẽ chart ================= */
 const tempChart = new Chart(
@@ -415,5 +400,5 @@ updateDateTime();
 // Load dashboard ngay khi mở trang
 loadDashboard();
 loadDashboardTrend();
-setInterval(loadDashboard, 1000);
-setInterval(loadDashboardTrend, 1000);
+setInterval(loadDashboard, 60000);
+setInterval(loadDashboardTrend, 60000);

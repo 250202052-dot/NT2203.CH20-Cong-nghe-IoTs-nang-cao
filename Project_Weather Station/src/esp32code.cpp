@@ -37,6 +37,12 @@ unsigned long lastSendTime   = 0;
 const unsigned long SAMPLE_INTERVAL = 10000;   // 10s
 const unsigned long SEND_INTERVAL   = 60000;   // 1 phút
 
+
+// ================= THINGSPEAK =================
+const char* THINGSPEAK_API_KEY = "DE1EUVOP56LST8Q3";
+const char* THINGSPEAK_URL = "http://api.thingspeak.com/update";
+
+
 // ================= WEB SERVER - FLASK =================
 // const char* SERVER_URL = "http://192.168.1.100:8080/log";
 const char* SERVER_API_URL = "https://weatherwebapplication-gfdxa5fkcxdth0gy.eastasia-01.azurewebsites.net/api/weather";
@@ -47,6 +53,7 @@ void collectBME280() {
   gPres = bme.readPressure() / 100.0F;
   Serial.print("BME280 Collected: T=" + String(gTemp, 2) + "°C, H=" + String(gHum, 2) + "%, P=" + String(gPres, 2) + "hPa \n");
 }
+
 
 // ================= TIME STRING =================
 String getTimestamp() {
@@ -165,6 +172,32 @@ void sendToServerAPI() {
   http.end();
 }
 
+void sendToThingSpeak() {
+  if (WiFi.status() != WL_CONNECTED) return;
+  if (isnan(gTemp) || isnan(gHum) || isnan(gPres)) return;
+
+  HTTPClient http;
+
+  String url = String(THINGSPEAK_URL) +
+               "?api_key=" + THINGSPEAK_API_KEY +
+               "&field1=" + String(gTemp, 2) +
+               "&field2=" + String(gHum, 2) +
+               "&field3=" + String(gPres, 2);
+
+  http.begin(url);
+
+  int httpCode = http.GET();
+
+  Serial.print("ThingSpeak HTTP: ");
+  Serial.println(httpCode);
+
+  if (httpCode > 0) {
+    Serial.println(http.getString());
+  }
+
+  http.end();
+}
+
 
 void Check_wifi_connection() {
   if (WiFi.status() != WL_CONNECTED) {
@@ -251,5 +284,7 @@ void loop() {
     sendToPC();  
     // sendToServer();
     sendToServerAPI();
+    sendToThingSpeak();
+
   }
 }

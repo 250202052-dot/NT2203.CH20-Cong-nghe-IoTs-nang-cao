@@ -30,6 +30,7 @@
         <div class="tab" onclick="showTab(1)">📈 Raw Data</div>
         <div class="tab" onclick="showTab(2)">🔮 Forecast</div>
         <div class="tab" onclick="showTab(3)">🗺️ Map</div>
+        <div class="tab" onclick="showTab(4)">🔮 Quản lý Sensor</div>
     </div>
 
     <!-- ================= DASHBOARD ================= -->
@@ -107,6 +108,11 @@
             </div>
         </div>
 
+        <div class="ai-tag">
+            🤖 Gợi ý bởi AI Model
+            <p id="ai-recommend"></p>
+        </div>
+
     </div>
 
     <!-- ================= RAW DATA ================= -->
@@ -166,6 +172,29 @@
             <div id="windyMap" style="width:100%; height:520px;"></div>
         </div>
     </div>
+
+
+    <!-- ================= QUẢN LÝ SENSOR ================= -->
+<div class="tab-content">
+    <div class="card chart-card weather">
+        
+        <div class="weather-top">
+            <div class="weather-title">🔮 Quản lý Sensor</div>
+            <div class="weather-icon">📊</div>
+        </div>
+
+        <div class="prediction" id="forecastText">
+            Đang tải dự đoán...
+        </div>
+
+        <div class="chart-wrapper">
+            <canvas id="forecastChart"></canvas>
+        </div>
+
+        <div class="weather-wave"></div>
+
+    </div>
+</div>
 
 </main>
 

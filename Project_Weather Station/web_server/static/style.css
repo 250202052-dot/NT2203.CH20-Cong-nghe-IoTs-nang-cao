@@ -272,3 +272,15 @@ footer {
     color: var(--muted);
     padding: 26px;
 }
+
+
+.ai-tag {
+    display: inline-block;
+    background: linear-gradient(135deg, #4facfe, #00f2fe);
+    color: white;
+    font-size: 12px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    margin-bottom: 10px;
+    font-weight: 500;
+}

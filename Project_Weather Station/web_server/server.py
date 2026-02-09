@@ -17,14 +17,13 @@ CORS(app, resources={
 
 
 
-
 API_SOURCE = "https://weatherwebapplication-gfdxa5fkcxdth0gy.eastasia-01.azurewebsites.net/api/weather"
 session = requests.Session()
 
 @app.route("/api/dashboard")
 def api_dashboard():
     try:
-        res = session.get(API_SOURCE, timeout=5)
+        res = session.get(API_SOURCE, timeout=10)
         res.raise_for_status()
 
         # 1️⃣ đảm bảo response là JSON
@@ -105,6 +104,25 @@ def send_telegram():
         "ok": r.ok,
         "telegram_response": r.json()
     })
+
+@app.route("/api/advice")
+def get_advice():
+
+    try:
+        res = requests.get(
+            "http://localhost:8000/weather",
+            timeout=60
+        )
+
+        data = res.json()
+
+        return jsonify({
+            "advice": data["advice"],
+            "weather": data["weather"]
+        })
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
 
 
 @app.route("/")
