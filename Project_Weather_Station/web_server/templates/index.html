@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>BME280 Weather Dashboard</title>
+
+    <!-- FONT -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+</head>
+
+<body>
+
+<header>
+    <h1>🌦️ BME280 Weather Dashboard</h1>
+    <p>ESP32 • Azure • Machine Learning</p>
+    <p id="currentDate"></p>
+</header>
+
+<main>
+
+    <!-- ================= TABS ================= -->
+    <div class="tabs">
+        <div class="tab active" onclick="showTab(0)">📊 Dashboard</div>
+        <div class="tab" onclick="showTab(1)">📈 Raw Data</div>
+        <div class="tab" onclick="showTab(2)">🔮 Forecast</div>
+        <div class="tab" onclick="showTab(3)">🔮 System Heath</div>
+    </div>
+
+    <!-- ================= DASHBOARD ================= -->
+    <div class="tab-content active">
+
+        <!-- KPI -->
+        <div class="grid">
+            <div class="card sensor-card temp">
+                <div class="icon">🌡️</div>
+                <h3>Nhiệt độ</h3>
+                <div class="value">
+                    <span id="temp">--</span><small>°C</small>
+                </div>
+            </div>
+
+            <div class="card sensor-card hum">
+                <div class="icon">💧</div>
+                <h3>Độ ẩm</h3>
+                <div class="value">
+                    <span id="hum">--</span><small>%</small>
+                </div>
+            </div>
+
+            <div class="card sensor-card pres">
+                <div class="icon">🔽</div>
+                <h3>Áp suất</h3>
+                <div class="value">
+                    <span id="pres">--</span><small>hPa</small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts -->
+        <div class="grid">
+            <div class="card chart-card">
+                <h4>🌡️ Nhiệt độ (phút)</h4>
+                <canvas id="tempChart"></canvas>
+            </div>
+
+            <div class="card chart-card">
+                <h4>💧 Độ ẩm (phút)</h4>
+                <canvas id="humChart"></canvas>
+            </div>
+
+            <div class="card chart-card">
+                <h4>🔽 Áp suất (phút)</h4>
+                <canvas id="presChart"></canvas>
+            </div>
+        </div>
+
+        <!-- Current weather -->
+        <div class="card">
+            <h3>📰 Thời tiết hiện tại</h3>
+            <p id="weatherNews"></p>
+        </div>
+
+        <!-- ===== TREND CARD (FIXED POSITION) ===== -->
+        <div class="card trend-card">
+            <h3>📊 Xu hướng thời tiết</h3>
+
+            <ul class="trend-list">
+                <li id="trendTempText">
+                    🌡️ Nhiệt độ: <strong>--</strong>
+                </li>
+                <li id="trendHumText">
+                    💧 Độ ẩm: <strong>--</strong>
+                </li>
+                <li id="trendPresText">
+                    🔽 Áp suất: <strong>--</strong>
+                </li>
+            </ul>
+
+            <div class="trend-summary" id="trendSummary">
+                ⏳ Đang phân tích xu hướng...
+            </div>
+        </div>
+
+        <div class="card trend-card">
+            🤖 Gợi ý bởi AI Model
+            <p id="ai-recommend"></p>
+        </div>
+
+    </div>
+
+    <!-- ================= RAW DATA ================= -->
+    <div class="tab-content">
+        <div class="card">
+            <div class="card-header">
+                <h3>📄 Raw Data <span>(Dữ liệu gốc)</span></h3>
+
+                <div class="filter-bar">
+                    <div class="filter-item">
+                        <label for="rawDate">📅 Ngày</label>
+                        <input type="date" id="rawDate" onchange="loadRawDataTable(1)">
+                    </div>
+
+                    <button class="btn btn-download" onclick="downloadRawCSV()">
+                        ⬇️ Download CSV
+                    </button>
+                </div>
+            </div>
+
+            <div class="table-wrapper">
+                <table class="raw-table">
+                    <thead>
+                        <tr>
+                            <th>Thời gian</th>
+                            <th>🌡️ Nhiệt độ (°C)</th>
+                            <th>💧 Độ ẩm (%)</th>
+                            <th>🔽 Áp suất (hPa)</th>
+                            <th>Nhãn phân loại</th>
+                        </tr>
+                    </thead>
+                    <tbody id="rawDataTable">
+                        <tr>
+                            <td colspan="5" class="table-empty">
+                                Chọn ngày để xem dữ liệu
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+        
+            <div id="pagination" class="pagination"></div>
+
+        </div>
+    </div>
+
+
+    <!-- ================= FORECAST ================= -->
+    <div class="tab-content">
+
+        <div class="forecast-wrapper">
+
+            <!-- 12 HOURS -->
+            <div class="forecast-section">
+                <h3 class="forecast-title">Dự đoán 12 giờ tới</h3>
+                <div class="forecast-hours" id="forecast12Hours"></div>
+            </div>
+
+            <!-- 7 DAYS -->
+            <div class="forecast-section">
+                <h3 class="forecast-title">Dự đoán 7 ngày tới</h3>
+                <div class="forecast-cards" id="forecast7Days"></div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- ================= SYSTEM HEALTH ================= -->
+    <div class="tab-content">
+
+        <!-- ===== IOT LAYER ===== -->
+        <div class="card">
+            <div class="layer-title">🧩 IoT Layer (ESP32 Device)</div>
+
+            <div class="device-grid">
+
+                <div class="device-card">
+
+                    <!-- HEADER -->
+                    <div class="device-header">
+                        <div class="device-title">ESP32 Controller</div>
+                        <div class="device-status" id="esp32Status">
+                            Checking...
+                        </div>
+                    </div>
+
+                    <!-- GRID INFO -->
+                    <div class="device-grid-info">
+
+                        <div class="info-box">
+                            <div class="info-label">📶 WiFi RSSI</div>
+                            <div class="info-value" id="esp32RSSI">-</div>
+                        </div>
+
+                        <div class="info-box">
+                            <div class="info-label">🌐 IP Address</div>
+                            <div class="info-value" id="esp32IP">-</div>
+                        </div>
+
+                        <div class="info-box">
+                            <div class="info-label">🧠 Truy cập vào ESP32 Dashboard</div>
+                            <div class="info-value">
+                                <a id="espDashboardLink"
+                                target="_blank"
+                                class="esp-link">
+                                Mở Dashboard
+                                </a>
+                            </div>
+                        </div>
+
+
+
+                    </div>
+
+                    <div class="device-grid-info">
+
+                        <div class="info-box">
+                            <div class="info-label">🧠 CPU MHz</div>
+                            <div class="info-value" id="esp32Cpu">-</div>
+                        </div>
+
+                        <div class="info-box">
+                            <div class="info-label">🔥 Chip Model</div>
+                            <div class="info-value" id="esp32Chip">-</div>
+                        </div>
+
+                        <div class="info-box">
+                            <div class="info-label">🧠 Free Heap</div>
+                            <div class="info-value" id="esp32Heap">-</div>
+                        </div>
+
+                        <div class="info-box">
+                            <div class="info-label">⏱ Uptime</div>
+                            <div class="info-value" id="esp32Uptime">-</div>
+                        </div>
+
+                    </div>
+                    <!-- FOOTER -->
+                    <div class="device-footer">
+                        🕒 Last Seen: <span id="esp32LastSeen">-</span>
+                    </div>
+
+
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- ===== GATEWAY LAYER ===== -->
+        <div class="card">
+            <div class="layer-title">🖥 Gateway Layer (Flask Server)</div>
+
+            <div class="device-grid-info">
+
+                <div class="device-card server-card">
+
+                    <!-- HEADER -->
+                    <div class="device-header">
+                        <div class="device-title">Flask Gateway</div>
+                        <div class="device-status" id="localstatus">
+                            Online
+                        </div>
+                    </div>
+                    
+                    <div class="health-bar">
+                        <div class="health-fill" id="cpuBar"></div>
+                    </div>
+                    <div class="device-info">
+                        🖥 CPU: <span id="cpuUsage">-</span>
+                    </div>
+
+                    <div class="health-bar">
+                        <div class="health-fill ram" id="ramBar"></div>
+                    </div>
+                    <div class="device-info">
+                        💾 RAM: <span id="ramUsage">-</span>
+                    </div>
+
+                    <div class="info-box">
+                        🧵 Threads: <span id="threadCount">-</span>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+
+
+        <!-- ===== CLOUD LAYER ===== -->
+        <div class="card">
+                <!-- HEADER -->
+                <div class="device-header">
+                    <div class="device-title">☁️ Cloud Layer</div>
+                    <div class="device-status" id="dbStatus">
+                         Checking...
+                    </div>
+            </div>
+
+            <div class="device-grid-info">
+
+                <div class="device-card">
+
+                    <div class="device-title">Azure SQL Database</div>
+                    
+                    <div class="device-grid-info">
+
+
+                        <div class="info-box">
+                            <div class="info-label">⚡Latency</div>
+                            <div class="info-value" id="dbLatency">-</div>
+                        </div>
+
+                        <div class="info-box">
+                            <div class="info-label">📦 Total Records</div>
+                            <div class="info-value" id="dbRecords">-</div>
+                        </div>
+
+                        <div class="info-box">
+                            <div class="info-label">🕒 Last Insert</div>
+                            <div class="info-value" id="dbLastInsert">-</div>
+                        </div>
+                </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+    
+
+</div>
+
+
+
+</main>
+
+
+<footer>
+    © 2026 | BME280 Weather System | Nhóm 5
+</footer>
+
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>

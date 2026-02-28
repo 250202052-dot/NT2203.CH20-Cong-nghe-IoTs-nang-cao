@@ -1,0 +1,468 @@
+/* ================= ROOT VARIABLES ================= */
+:root {
+    --primary: #2563eb;
+    --primary-dark: #1d4ed8;
+    --primary-soft: #eff6ff;
+
+    --bg: #f8fafc;
+    --bg-gradient: linear-gradient(180deg, #f8fafc, #eef2ff);
+
+    --card: #ffffff;
+    --border: #e5e7eb;
+
+    --text: #0f172a;
+    --muted: #64748b;
+
+    --shadow-soft: 0 8px 20px rgba(0,0,0,0.06);
+    --shadow-hover: 0 14px 30px rgba(0,0,0,0.1);
+}
+
+/* ================= GLOBAL ================= */
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: "Inter", "Segoe UI", sans-serif;
+    background: var(--bg-gradient);
+    color: var(--text);
+}
+
+/* ================= HEADER ================= */
+header {
+    background: var(--primary);
+    color: white;
+    text-align: center;
+    padding: 36px 20px;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 26px;
+    font-weight: 700;
+}
+
+header p {
+    margin-top: 6px;
+    opacity: 0.9;
+}
+
+/* ================= MAIN ================= */
+main {
+    max-width: 1200px;
+    margin: auto;
+    padding: 24px;
+}
+
+/* ================= TABS ================= */
+.tabs {
+    display: flex;
+    background: white;
+    border-radius: 12px;
+    padding: 6px;
+    gap: 6px;
+    margin-bottom: 24px;
+    border: 1px solid var(--border);
+}
+
+.tab {
+    flex: 1;
+    padding: 12px;
+    text-align: center;
+    cursor: pointer;
+    font-weight: 600;
+    border-radius: 8px;
+    color: var(--muted);
+    transition: 0.25s ease;
+}
+
+.tab:hover {
+    background: var(--primary-soft);
+}
+
+.tab.active {
+    background: var(--primary);
+    color: white;
+}
+
+/* ================= TAB CONTENT ================= */
+.tab-content { display: none; }
+.tab-content.active { display: block; }
+
+/* ================= GRID ================= */
+.grid,
+.device-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+}
+
+/* ================= CARD ================= */
+.card {
+    background: var(--card);
+    border-radius: 16px;
+    padding: 22px;
+    border: 1px solid var(--border);
+    box-shadow: var(--shadow-soft);
+    transition: 0.25s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-hover);
+}
+
+/* ================= SENSOR CARD ================= */
+.sensor-card {
+    text-align: center;
+    border-top: 4px solid var(--primary);
+}
+
+.sensor-card h3 {
+    margin: 8px 0;
+    font-size: 15px;
+    color: var(--muted);
+}
+
+.icon {
+    font-size: 32px;
+}
+
+.value {
+    font-size: 36px;
+    font-weight: 700;
+    margin-top: 6px;
+}
+
+/* ================= TREND ================= */
+.trend-card {
+    background: var(--primary-soft);
+}
+
+.trend-list {
+    list-style: none;
+    padding: 0;
+    margin: 14px 0;
+}
+
+.trend-list li {
+    margin-bottom: 10px;
+    font-size: 14px;
+}
+
+.trend-summary {
+    margin-top: 14px;
+    padding: 12px 16px;
+    background: white;
+    border-radius: 10px;
+    font-weight: 600;
+    color: var(--primary);
+}
+
+/* ================= FILTER ================= */
+.filter-bar {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-top: 12px;
+}
+
+.filter-bar input[type="date"] {
+    padding: 9px 12px;
+    font-size: 14px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    background: white;
+}
+
+.filter-bar input[type="date"]:focus {
+    outline: none;
+    border-color: var(--primary);
+}
+
+/* ================= BUTTON ================= */
+.btn,
+.device-toggle {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    padding: 10px 18px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    background: var(--primary);
+    color: white;
+    transition: 0.25s ease;
+}
+
+.btn:hover,
+.device-toggle:hover {
+    background: var(--primary-dark);
+}
+
+/* ================= TABLE ================= */
+.table-wrapper {
+    overflow-x: auto;
+    margin-top: 14px;
+}
+
+.raw-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14px;
+}
+
+.raw-table th {
+    background: var(--primary-soft);
+    color: var(--primary);
+    font-weight: 600;
+    padding: 12px;
+}
+
+.raw-table td {
+    padding: 12px;
+    border-bottom: 1px solid var(--border);
+    text-align: center;
+}
+
+.raw-table tr:hover {
+    background: #f1f5f9;
+}
+
+/* ================= DEVICE ================= */
+
+.layer-title {
+    font-size: 18px;
+    font-weight: 700;
+    margin-bottom: 18px;
+    color: var(--primary);
+}
+
+.device-card {
+    border-radius: 14px;
+    padding: 20px;
+    border: 1px solid var(--border);
+    background: white;
+    transition: 0.25s ease;
+}
+
+.device-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.device-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.device-status {
+    padding: 6px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    background: var(--primary-soft);
+    color: var(--primary);
+}
+
+.device-grid-info {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 14px;
+    margin-bottom: 16px;
+}
+
+.info-box {
+    background: #f9fafb;
+    border-radius: 10px;
+    padding: 12px;
+    border: 1px solid var(--border);
+}
+
+.info-label {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 4px;
+}
+
+.info-value {
+    font-size: 15px;
+    font-weight: 600;
+}
+
+.device-footer {
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 12px;
+}
+
+/* ================= HEALTH BAR ================= */
+
+.health-bar {
+    width: 100%;
+    height: 8px;
+    background: #e5e7eb;
+    border-radius: 20px;
+    margin: 8px 0 6px;
+    overflow: hidden;
+}
+
+.health-fill {
+    height: 100%;
+    width: 0%;
+    background: var(--primary);
+    border-radius: 20px;
+    transition: width 0.4s ease;
+}
+
+/* ================= FULL INFO ================= */
+
+.device-full {
+    max-height: 0;
+    overflow: hidden;
+    transition: 0.4s ease;
+}
+
+.device-full.open {
+    max-height: 300px;
+    margin-top: 14px;
+}
+
+.device-full pre {
+    background: #0f172a;
+    color: #e2e8f0;
+    padding: 14px;
+    border-radius: 10px;
+    font-size: 12px;
+    overflow-x: auto;
+}
+
+/* ================= FOOTER ================= */
+
+footer {
+    text-align: center;
+    padding: 20px;
+    font-size: 13px;
+    color: var(--muted);
+}
+
+
+/* ================= FORECAST ================= */
+
+.forecast-section {
+    margin-bottom: 40px;
+}
+
+.forecast-title {
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--primary);
+    margin-bottom: 16px;
+}
+
+/* ===== 7 DAY GRID ===== */
+
+.forecast-cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 16px;
+}
+
+.forecast-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 16px;
+    text-align: center;
+    transition: 0.25s ease;
+}
+
+.forecast-card:hover {
+    transform: translateY(-4px);
+    box-shadow: var(--shadow-soft);
+}
+
+.forecast-day {
+    font-weight: 600;
+    color: var(--primary);
+    margin-bottom: 8px;
+}
+
+.forecast-temp {
+    font-size: 20px;
+    font-weight: 700;
+}
+
+.forecast-minmax {
+    font-size: 13px;
+    color: var(--muted);
+    margin-top: 4px;
+}
+
+/* ===== 12 HOUR HORIZONTAL ===== */
+
+.forecast-hours {
+    display: flex;
+    overflow-x: auto;
+    gap: 14px;
+    padding-bottom: 10px;
+}
+
+.hour-card {
+    min-width: 110px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 14px;
+    text-align: center;
+    flex-shrink: 0;
+    transition: 0.25s ease;
+}
+
+.hour-card:hover {
+    box-shadow: var(--shadow-soft);
+}
+
+.hour-time {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--primary);
+}
+
+.hour-temp {
+    font-size: 16px;
+    font-weight: 700;
+    margin-top: 6px;
+}
+
+.hour-humidity {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 4px;
+}
+
+
+.gauge-container {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    gap: 40px;
+    padding: 20px;
+}
+
+canvas {
+    max-width: 100%;
+}
+
+html, body {
+    overflow-x: hidden;
+}

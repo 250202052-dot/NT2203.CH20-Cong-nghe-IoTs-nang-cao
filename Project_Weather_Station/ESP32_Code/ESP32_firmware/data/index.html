@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+<head>
+
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>ESP32 Weather Station</title>
+
+  <link rel="stylesheet" href="/style.css">
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+<body>
+
+  <header>
+
+    <h1>ESP32 Weather Station</h1>
+    <p>Realtime monitoring</p>
+
+  </header>
+
+
+  <main>
+
+    <div class="grid">
+      <div class="card sensor-card temp">
+
+        <div class="icon">🌡</div>
+
+        <h3>Temperature</h3>
+
+        <div class="value">
+
+          <span id="temperature-output">0</span>
+
+          <small>°C</small>
+
+        </div>
+
+      </div>
+
+
+
+      <div class="card sensor-card hum">
+
+        <div class="icon">💧</div>
+
+        <h3>Humidity</h3>
+
+        <div class="value">
+
+          <span id="humidity-output">0</span>
+
+          <small>%</small>
+
+        </div>
+
+      </div>
+
+
+
+      <div class="card sensor-card pres">
+
+        <div class="icon">📊</div>
+
+        <h3>Pressure</h3>
+
+        <div class="value">
+
+          <span id="pressure-output">0</span>
+
+          <small>hPa</small>
+
+        </div>
+
+      </div>
+      <div class="card sensor-card predict">
+        <div class="icon">🔮</div>
+        <h3>Dự đoán thời tiết</h3>
+        <div class="value">
+          <span id="Predict">--</span>
+        </div>
+      </div>
+
+    </div>
+
+
+
+    <div class="card chart-card">
+
+      <canvas id="chart-temperature"></canvas>
+
+    </div>
+
+
+    <div class="card chart-card">
+
+      <canvas id="chart-humidity"></canvas>
+
+    </div>
+
+
+    <div class="card chart-card">
+
+      <canvas id="chart-pressure"></canvas>
+
+    </div>
+
+
+  </main>
+
+
+  <footer>
+
+    ESP32 Weather Station
+
+  </footer>
+
+
+  <script src="/script.js"></script>
+
+</body>
+
+</html>

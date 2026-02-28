@@ -1,0 +1,25 @@
+FROM python:3.11-slim
+
+# Install Java
+RUN apt-get update && \
+    apt-get install -y openjdk-21-jdk && \
+    apt-get clean
+
+# Set JAVA_HOME
+ENV JAVA_HOME=/usr/lib/jvm/java-21-openjdk-amd64
+ENV PATH="$JAVA_HOME/bin:$PATH"
+ENV TELEGRAM_BOT_TOKEN="8399977191:AAHEDbyZAMbQQHQtm7y1PQLMlK3km5Js-DU"
+ENV DB_USER="khoa250202042@weather-sql-250202042"
+ENV DB_PASS="Isotesting1@"
+
+# Workdir
+WORKDIR /app
+
+# Copy project
+COPY . .
+
+# Install Python libs
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Run app
+CMD ["python", "server.py"]
