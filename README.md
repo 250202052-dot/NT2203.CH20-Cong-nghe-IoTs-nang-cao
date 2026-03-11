@@ -234,5 +234,5 @@ Lưu ý:
 - Python, Flask, FastAPI
 - Azure SQL + JDBC
 - scikit-learn, TensorFlow, micromlgen, joblib
-- Android Java, Volley
-- FAISS, sentence-transformers, OpenRouter/OpenAI API
+- Android Java
+- OpenRouter/OpenAI API
